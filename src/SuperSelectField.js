@@ -359,12 +359,18 @@ class SelectField extends Component {
     event.preventDefault()
     const { selectedItems } = this.state
     if (this.props.multiple) {
-      const selectedItemExists = selectedItems.some(obj => areEqual(obj.value, selectedItem.value))
+      const selectedItemIdx = selectedItems.findIndex(obj => areEqual(obj.value, selectedItem.value))
+      const selectedItemExists = selectedItemIdx !== -1
       const updatedValues = selectedItemExists
         ? selectedItems.filter(obj => !areEqual(obj.value, selectedItem.value))
         : selectedItems.concat(selectedItem)
       this.setState({ selectedItems: updatedValues })
       this.clearTextField(() => this.focusTextField())
+      if (selectedItemExists && typeof this.props.itemRemoved === 'function') {
+        this.props.itemRemoved(selectedItem, selectedItemIdx)
+      } else if (!selectedItemExists && typeof this.props.itemAdded === 'function') {
+        this.props.itemAdded(selectedItem, selectedItemIdx)
+      }
     } else {
       const updatedValue = areEqual(selectedItems, selectedItem) ? null : selectedItem
       this.setState({ selectedItems: updatedValue }, () => this.closeMenu())

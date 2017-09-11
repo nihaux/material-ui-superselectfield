@@ -297,7 +297,7 @@ class SelectField extends Component {
   }
 
   openMenu () {
-    if (this.state.itemsLength) this.setState({ isOpen: true }, () => this.focusTextField())
+    if (this.state.itemsLength || this.props.alwaysOpenOnClick) this.setState({ isOpen: true }, () => this.focusTextField())
   }
 
   focusTextField () {
@@ -632,6 +632,7 @@ SelectField.propTypes = {
   checkedIcon: PropTypes.node,
   unCheckedIcon: PropTypes.node,
   hoverColor: PropTypes.string,
+  alwaysOpenOnClick: PropTypes.bool,
   // children can be either:
   // an html element with a required 'value' property, and optional label prop,
   // an optgroup with valid children (same as bove case),
